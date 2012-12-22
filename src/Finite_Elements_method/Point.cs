@@ -7,37 +7,39 @@ namespace Finite_Elements_method
 {
     public class Point
     {
-        double x, y;
-        double dx, dy;
+        double _x, _y;
+        double _dx, _dy;
 
         public Point(double x, double y)
         {
-            this.X = x;
-            this.Y = y;
+            _x = x;
+            _y = y;
+            _dx = 0;
+            _dy = 0;
         }
 
         public double X
         {
-            get { return x; }
-            set { x = value; }
+            get { return _x; }
+            set { _x = value; }
         }
 
         public double Y
         {
-            get { return y; }
-            set { y = value; }
+            get { return _y; }
+            set { _y = value; }
         }
 
         public double Dx
         {
-            get { return Dx; }
-            set { Dx = value; }
+            get { return _dx; }
+            set { _dx = value; }
         }
 
         public double Dy
         {
-            get { return Dy; }
-            set { Dy = value; }
+            get { return _dy; }
+            set { _dy = value; }
         }
     }
 }

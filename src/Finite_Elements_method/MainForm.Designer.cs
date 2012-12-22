@@ -28,73 +28,85 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.button1 = new System.Windows.Forms.Button();
-            this.btnCalculate = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-            this.panel1.SuspendLayout();
+            this.pbMain = new System.Windows.Forms.PictureBox();
+            this.msMainMenu = new System.Windows.Forms.MenuStrip();
+            this.tsmiLoad = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiCalculate = new System.Windows.Forms.ToolStripMenuItem();
+            this.ofdLoad = new System.Windows.Forms.OpenFileDialog();
+            ((System.ComponentModel.ISupportInitialize)(this.pbMain)).BeginInit();
+            this.msMainMenu.SuspendLayout();
             this.SuspendLayout();
             // 
-            // pictureBox1
+            // pbMain
             // 
-            this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.pictureBox1.Location = new System.Drawing.Point(211, 0);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(376, 334);
-            this.pictureBox1.TabIndex = 0;
-            this.pictureBox1.TabStop = false;
+            this.pbMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pbMain.Location = new System.Drawing.Point(0, 24);
+            this.pbMain.Name = "pbMain";
+            this.pbMain.Size = new System.Drawing.Size(625, 304);
+            this.pbMain.TabIndex = 0;
+            this.pbMain.TabStop = false;
+            this.pbMain.Paint += new System.Windows.Forms.PaintEventHandler(this.pbMain_Paint);
+            this.pbMain.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pbMain_MouseDown);
+            this.pbMain.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pbMain_MouseMove);
+            this.pbMain.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pbMain_MouseUp);
+            this.pbMain.Resize += new System.EventHandler(this.pbMain_Resize);
             // 
-            // panel1
+            // msMainMenu
             // 
-            this.panel1.Controls.Add(this.btnCalculate);
-            this.panel1.Controls.Add(this.button1);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
-            this.panel1.Location = new System.Drawing.Point(0, 0);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(200, 334);
-            this.panel1.TabIndex = 1;
+            this.msMainMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiLoad,
+            this.tsmiCalculate});
+            this.msMainMenu.Location = new System.Drawing.Point(0, 0);
+            this.msMainMenu.Name = "msMainMenu";
+            this.msMainMenu.Size = new System.Drawing.Size(625, 24);
+            this.msMainMenu.TabIndex = 2;
+            this.msMainMenu.Text = "menuStrip1";
             // 
-            // button1
+            // tsmiLoad
             // 
-            this.button1.Location = new System.Drawing.Point(21, 299);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "Загрузить";
-            this.button1.UseVisualStyleBackColor = true;
+            this.tsmiLoad.Name = "tsmiLoad";
+            this.tsmiLoad.Size = new System.Drawing.Size(73, 20);
+            this.tsmiLoad.Text = "Загрузить";
+            this.tsmiLoad.Click += new System.EventHandler(this.tsmiLoad_Click);
             // 
-            // btnCalculate
+            // tsmiCalculate
             // 
-            this.btnCalculate.Location = new System.Drawing.Point(113, 299);
-            this.btnCalculate.Name = "btnCalculate";
-            this.btnCalculate.Size = new System.Drawing.Size(75, 23);
-            this.btnCalculate.TabIndex = 1;
-            this.btnCalculate.Text = "Посчитать";
-            this.btnCalculate.UseVisualStyleBackColor = true;
-            this.btnCalculate.Click += new System.EventHandler(this.btnCalculate_Click);
+            this.tsmiCalculate.Name = "tsmiCalculate";
+            this.tsmiCalculate.Size = new System.Drawing.Size(77, 20);
+            this.tsmiCalculate.Text = "Посчитать";
+            this.tsmiCalculate.Click += new System.EventHandler(this.tsmiCalculate_Click);
+            // 
+            // ofdLoad
+            // 
+            this.ofdLoad.DefaultExt = "txt";
+            this.ofdLoad.Filter = "TXT files|*.txt";
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(587, 334);
-            this.Controls.Add(this.panel1);
-            this.Controls.Add(this.pictureBox1);
+            this.ClientSize = new System.Drawing.Size(625, 328);
+            this.Controls.Add(this.pbMain);
+            this.Controls.Add(this.msMainMenu);
             this.Name = "MainForm";
             this.Text = "Плоская задача теории упругости";
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-            this.panel1.ResumeLayout(false);
+            this.Load += new System.EventHandler(this.MainForm_Load);
+            this.Resize += new System.EventHandler(this.MainForm_Resize);
+            ((System.ComponentModel.ISupportInitialize)(this.pbMain)).EndInit();
+            this.msMainMenu.ResumeLayout(false);
+            this.msMainMenu.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
 
-        private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Button btnCalculate;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.PictureBox pbMain;
+        private System.Windows.Forms.MenuStrip msMainMenu;
+        private System.Windows.Forms.ToolStripMenuItem tsmiLoad;
+        private System.Windows.Forms.ToolStripMenuItem tsmiCalculate;
+        private System.Windows.Forms.OpenFileDialog ofdLoad;
     }
 }
 
