@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Finite_Elements_method", "Finite_Elements_method\Finite_Elements_method.csproj", "{A4B965DB-EC0D-4E4F-A8FC-090C8E418CE6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoadTest", "..\tests\LoadTest\LoadTest.csproj", "{FA7F72C9-2DB0-4907-9ADC-3F55DA029001}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,6 +15,10 @@ Global
 		{A4B965DB-EC0D-4E4F-A8FC-090C8E418CE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A4B965DB-EC0D-4E4F-A8FC-090C8E418CE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A4B965DB-EC0D-4E4F-A8FC-090C8E418CE6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA7F72C9-2DB0-4907-9ADC-3F55DA029001}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA7F72C9-2DB0-4907-9ADC-3F55DA029001}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA7F72C9-2DB0-4907-9ADC-3F55DA029001}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA7F72C9-2DB0-4907-9ADC-3F55DA029001}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
