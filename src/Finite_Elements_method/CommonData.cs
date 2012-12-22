@@ -52,7 +52,7 @@ namespace Finite_Elements_method
             int lineIdx = 0;
             /*  Считывание данных в поля класса */
             int adjValue;
-            int.TryParse(inputLines[lineIdx++], out this._NTotalNodes);
+            this._NTotalNodes = int.Parse(inputLines[lineIdx++]);
             this._M = new int[this._NTotalNodes][];
             for (int i = 0; i < this._NTotalNodes; i++)
             {
@@ -61,7 +61,7 @@ namespace Finite_Elements_method
                 {
                     /* предполагаем, что элементы матрицы смежности разделены одним пробелом
                      * и возможные значения матрицы 1 или 0 */
-                    int.TryParse((inputLines[lineIdx + i][2 * j]).ToString(), out adjValue);
+                    adjValue = int.Parse((inputLines[lineIdx + i][2 * j]).ToString());
                     this._M[i][j] = adjValue;
                 }
             }
@@ -74,51 +74,51 @@ namespace Finite_Elements_method
             {
                 /* Координаты вершин разделены одним пробелом */
                 coordPair = inputLines[lineIdx].Split(' ');
-                double.TryParse(coordPair[0], out x);
-                double.TryParse(coordPair[1], out y);
+                x = double.Parse(coordPair[0]);
+                y = double.Parse(coordPair[1]);
                 Coords[i] = new Point(x, y);
             }
             lineIdx += this._NTotalNodes;
 
-            int.TryParse(inputLines[lineIdx++], out this._NExternalNodes);
+            this._NExternalNodes = int.Parse(inputLines[lineIdx++]);
             this._BoundExternal = new int[this._NExternalNodes];
             if (this._NExternalNodes > 0)
             {
                 string[] extBoundPoints = inputLines[lineIdx++].Split(' ');
                 for (int i = 0; i < this._NExternalNodes; i++)
                 {
-                    int.TryParse(extBoundPoints[i], out this._BoundExternal[i]);
+                    this._BoundExternal[i] = int.Parse(extBoundPoints[i]);
                 }
             }
 
-            int.TryParse(inputLines[lineIdx++], out this._NInternalNodes);
+            this._NInternalNodes = int.Parse(inputLines[lineIdx++]);
             this._BoundInternal = new int[this._NInternalNodes];
             if (this._NInternalNodes > 0)
             {
                 string[] innerBoundPoints = inputLines[lineIdx++].Split(' ');
                 for (int i = 0; i < this._NInternalNodes; i++)
                 {
-                    int.TryParse(innerBoundPoints[i], out this._BoundInternal[i]);
+                    this._BoundInternal[i] = int.Parse(innerBoundPoints[i]);
                 }
             }
 
-            int.TryParse(inputLines[lineIdx++], out this._NBndConditions);
+            this._NBndConditions = int.Parse(inputLines[lineIdx++]);
             string[] bndCondition;
             int vertexNo;
             double dx, dy;
             for (int i = 0; i < this._NBndConditions; i++)
             {
                 bndCondition = inputLines[lineIdx + i].Split(' ');
-                int.TryParse(bndCondition[0], out vertexNo);
-                double.TryParse(bndCondition[1], out dx);
+                vertexNo = int.Parse(bndCondition[0]);
+                dx = double.Parse(bndCondition[1]);
                 this._Coords[vertexNo].Dx = dx;
-                double.TryParse(bndCondition[2], out dy);
+                dy = double.Parse(bndCondition[2]);
                 this._Coords[vertexNo].Dy = dy;
             }
             lineIdx += this._NBndConditions;
 
-            double.TryParse(inputLines[lineIdx++], out this._E);
-            double.TryParse(inputLines[lineIdx++], out this._v);
+            this._E = double.Parse(inputLines[lineIdx++]);
+            this._v = double.Parse(inputLines[lineIdx++]);
         }
 
         /********************* Properties *********************/
