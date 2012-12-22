@@ -21,10 +21,14 @@ namespace LoadTest
                     data.Load(f);
                     Console.WriteLine("File {0} was read successfully", f);
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
                     testSuccessfull = false;
                     Console.WriteLine("Error during reading file {0}!!!", f);
+                    Console.WriteLine(e.ToString());
+                    Console.WriteLine();
+                    Console.WriteLine("Press Enter to continue...");
+                    Console.ReadLine();
                 }
             }
 
