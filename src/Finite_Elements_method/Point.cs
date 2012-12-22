@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Finite_Elements_method
 {
-    class Point
+    public class Point
     {
         double x, y;
         double dx, dy;

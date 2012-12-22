@@ -6,7 +6,7 @@ using System.Drawing;
 
 namespace Finite_Elements_method
 {
-    class Triangle
+    public class Triangle
     {
         Point i,j,k;
 
