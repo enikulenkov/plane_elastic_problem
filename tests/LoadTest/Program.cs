@@ -11,12 +11,33 @@ namespace LoadTest
     {
         static void Main(string[] args)
         {
+            bool testSuccessfull = true;
+
             CommonData data = new CommonData();
             foreach (string f in Directory.GetFiles("..\\..\\..\\..\\samples"))
             {
-                data.Load(f);
-                Console.WriteLine("File {0} was read successfully", f);
+                try
+                {
+                    data.Load(f);
+                    Console.WriteLine("File {0} was read successfully", f);
+                }
+                catch (Exception)
+                {
+                    testSuccessfull = false;
+                    Console.WriteLine("Error during reading file {0}!!!", f);
+                }
             }
+
+            Console.WriteLine();
+            if (testSuccessfull)
+            {
+                Console.WriteLine("Test has finished successfully. Press Enter to continue...");
+            }
+            else
+            {
+                Console.WriteLine("Test has failed. Press Enter to continue...");
+            }
+            Console.ReadLine();
         }
     }
 }
