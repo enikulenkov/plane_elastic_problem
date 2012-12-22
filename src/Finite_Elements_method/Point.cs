@@ -10,6 +10,12 @@ namespace Finite_Elements_method
         double x, y;
         double dx, dy;
 
+        public Point(double x, double y)
+        {
+            this.X = x;
+            this.Y = y;
+        }
+
         public double X
         {
             get { return x; }
