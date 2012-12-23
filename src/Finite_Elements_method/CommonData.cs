@@ -73,7 +73,7 @@ namespace Finite_Elements_method
             for (int i = 0; i < this._NTotalNodes; i++)
             {
                 /* Координаты вершин разделены одним пробелом */
-                coordPair = inputLines[lineIdx].Split(' ');
+                coordPair = inputLines[lineIdx+i].Split(' ');
                 x = double.Parse(coordPair[0]);
                 y = double.Parse(coordPair[1]);
                 Coords[i] = new Point(x, y);
@@ -119,6 +119,8 @@ namespace Finite_Elements_method
 
             this._E = double.Parse(inputLines[lineIdx++]);
             this._v = double.Parse(inputLines[lineIdx++]);
+
+            this._u = new double[2 * _NTotalNodes];
         }
 
         /********************* Properties *********************/
