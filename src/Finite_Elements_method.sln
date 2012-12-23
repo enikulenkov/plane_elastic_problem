@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Finite_Elements_method", "F
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoadTest", "..\tests\LoadTest\LoadTest.csproj", "{FA7F72C9-2DB0-4907-9ADC-3F55DA029001}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MathTests", "..\tests\MathTests\MathTests.csproj", "{DB11B991-AFE3-47B9-8DE9-03F2652E8DDC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,6 +21,10 @@ Global
 		{FA7F72C9-2DB0-4907-9ADC-3F55DA029001}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FA7F72C9-2DB0-4907-9ADC-3F55DA029001}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FA7F72C9-2DB0-4907-9ADC-3F55DA029001}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB11B991-AFE3-47B9-8DE9-03F2652E8DDC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB11B991-AFE3-47B9-8DE9-03F2652E8DDC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB11B991-AFE3-47B9-8DE9-03F2652E8DDC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB11B991-AFE3-47B9-8DE9-03F2652E8DDC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
