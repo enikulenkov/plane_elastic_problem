@@ -79,6 +79,7 @@ namespace Finite_Elements_method
             }
             lineIdx += this._NTotalNodes;
 
+            /*Считывание внешней границы*/
             this._NExternalNodes = int.Parse(inputLines[lineIdx++]);
             this._BoundExternal = new int[this._NExternalNodes];
             if (this._NExternalNodes > 0)
@@ -90,6 +91,7 @@ namespace Finite_Elements_method
                 }
             }
 
+            /*Считывание внутренних границ*/
             this._NInternalNodes = int.Parse(inputLines[lineIdx++]);
             this._BoundInternal = new int[this._NInternalNodes];
             if (this._NInternalNodes > 0)
@@ -101,6 +103,7 @@ namespace Finite_Elements_method
                 }
             }
 
+            /*Считывание граничных условий*/
             this._NBndConditions = int.Parse(inputLines[lineIdx++]);
             string[] bndCondition;
             int vertexNo;

@@ -120,6 +120,7 @@ namespace Finite_Elements_method
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+            ofdLoad.InitialDirectory = Application.StartupPath;
             tsmiCalculate.Enabled = false;
             width = pbMain.Width;
             height = pbMain.Height;

@@ -428,8 +428,10 @@ namespace Finite_Elements_method
             return deltas;
         }
 
-
+/*----------------------------------------------------------------*/
         /* Алгоритм Кахилла-Маки перенумерации вершин */
+        /* Функция возвращает список вершин, находящихся на последнем уровне графа для вершины beginTop, 
+         * и количество уровней levelNum*/
         int[] lastLevel(int[][] connMatrix, int N, int beginTop, out int levelNum) 
         {
             int level = 0;
@@ -467,6 +469,7 @@ namespace Finite_Elements_method
             return ll[level];
         }
 
+        /*Возвращает список соседних вершин для вершины top*/
         int[] pairedTops(int[][] connMatrix, int N, int top, List<int> passed)
         {
             List<int> l = new List<int>();
@@ -480,6 +483,7 @@ namespace Finite_Elements_method
             return l.ToArray();
         }
 
+        /*Функция, определяющая количество связей у узла top*/
         int countLink(int[][] connMatrix, int N, int top) 
         {
             int count = 0;
@@ -493,6 +497,7 @@ namespace Finite_Elements_method
             return count;
         }
 
+        /*Алгоритм Катхилла-Макки*/
         int[] CuthillMcKee(int[][] connMatrix, out bool ok)
         {
             int N = connMatrix[0].Length;
@@ -536,12 +541,16 @@ namespace Finite_Elements_method
                 }
             }
             int[] result = new int[N];
+            /*Если алгоритм сразу не нашёл начальную вершину для 
+             перенумерации, то он не сработает и далее решение пойдёт по старой нумерации*/
             if (!ok)
             {
                 return null;
             }
             else 
             {
+                /*Генерирование результирующего вектора, в котором индексы новые номера вершин,
+                 * а содержимое старые номера*/
                 int i = N-1;
                 Queue<int> q = new Queue<int>();
                 q.Enqueue(top);
@@ -565,6 +574,7 @@ namespace Finite_Elements_method
             return result;   
         }
 
+        /*Применение изменений, последовавших в ходе алгоритма Ктахилла-Макки*/
         void applyCuthillMcKee(CommonData c, int[] newTopsNum) 
         {
             List<int> l = newTopsNum.ToList<int>();
@@ -655,7 +665,6 @@ namespace Finite_Elements_method
             /* Посчитать f с учетом граничных условий (CommonData.u) */
             /* Решаем методом Холецкого LU*x=f и возвращаем результат */
 
-            /*Следующий код находится на стадии правки нераскомменчивать*/
             bool ok;
             int[] m = CuthillMcKee(cd.M, out ok);
             if (ok)
