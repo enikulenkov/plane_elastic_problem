@@ -91,7 +91,7 @@ namespace Finite_Elements_method
 
         private void tsmiCalculate_Click(object sender, EventArgs e)
         {
-            cd.ChangedPoints = changedPoints.ToArray();
+            cd.SetChangedPoints(changedPoints.ToArray());
             Solver s = new Solver();
             s.Solve(cd);
             pbMain.Refresh();
@@ -149,7 +149,7 @@ namespace Finite_Elements_method
             Pen blackPen = new Pen(Color.Black);
             Pen redPen = new Pen(Color.Red);
             Pen greenPen = new Pen(Color.Green);
-            Pen grayPen = new Pen(Color.SlateGray);
+            Pen grayPen = new Pen(Color.LightGray);
 
             whitePen.Width = 2;
             blackPen.Width = 2;

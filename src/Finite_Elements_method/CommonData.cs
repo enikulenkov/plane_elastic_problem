@@ -23,8 +23,7 @@ namespace Finite_Elements_method
         //private double[] _u;           //вектор перемещений
         private Point[] _Coords;       //массив координат вершин
         private double _E, _v;          //параметры материала
-        //double x0,x1,y0,y1;   //min и max координаты области
- 
+        private int[] _changedPoints; //Список изменённых вершин на форме 
         /************************* Methods ********************************/
         public void Load(String fileName)
         {
@@ -106,6 +105,7 @@ namespace Finite_Elements_method
             string[] bndCondition;
             int vertexNo;
             double dx, dy;
+            this._changedPoints = new int[this._NBndConditions];
             for (int i = 0; i < this._NBndConditions; i++)
             {
                 bndCondition = inputLines[lineIdx + i].Split(' ');
@@ -114,9 +114,10 @@ namespace Finite_Elements_method
                 this._Coords[vertexNo].Dx = dx;
                 dy = double.Parse(bndCondition[2]);
                 this._Coords[vertexNo].Dy = dy;
+                _changedPoints[i] = vertexNo;
             }
             lineIdx += this._NBndConditions;
-
+            
             this._E = double.Parse(inputLines[lineIdx++]);
             this._v = double.Parse(inputLines[lineIdx++]);
         }
@@ -151,16 +152,19 @@ namespace Finite_Elements_method
         public int[][] M
         {
             get { return _M; }
+            set { _M = value; }
         }
 
         public int[] BoundExternal
         {
             get { return _BoundExternal; }
+            set { _BoundExternal = value; }
         }
 
         public int[] BoundInternal
         {
             get { return _BoundInternal; }
+            set { _BoundInternal = value; }
         }
 
         public Triangle[] Triangles
@@ -186,6 +190,7 @@ namespace Finite_Elements_method
         public Point[] Coords
         {
             get { return _Coords; }
+            set { _Coords = value; }
         }
 
         public double E
@@ -196,6 +201,33 @@ namespace Finite_Elements_method
         public double v
         {
             get { return _v; }
+        }
+
+        public void SetChangedPoints(int[] value, bool afterCM = false) 
+        {
+            if (_changedPoints != null)
+            {
+                List<int> l = new List<int>(_changedPoints);
+                if (afterCM)
+                {
+                    _changedPoints = value;
+                }
+                else
+                {
+                    l.AddRange(value);
+                    _changedPoints = l.ToArray();
+                }
+            }
+            else 
+            {
+                _changedPoints = value;
+            }
+
+        }
+
+        public int[] ChangedPoints 
+        {
+            get { return _changedPoints; }
         }
     }
 }

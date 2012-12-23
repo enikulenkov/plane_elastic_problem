@@ -611,13 +611,14 @@ namespace Finite_Elements_method
                 newChangedPoints[k] = l.IndexOf(i);
                 k++;
             }
-            c.M = newConnMatrix.ToArray();
-            c.BoundExternal = newBoundExternal;
-            c.BoundInternal = newBoundInternal;
-            c.Coords = newCoord;
-            c.ChangedPoints = newChangedPoints;
-
-
+            if (getBandWidthOfConnectivityMatrix(c.M)>getBandWidthOfConnectivityMatrix(newConnMatrix.ToArray()))
+            {
+                c.M = newConnMatrix.ToArray();
+                c.BoundExternal = newBoundExternal;
+                c.BoundInternal = newBoundInternal;
+                c.Coords = newCoord;
+                c.SetChangedPoints(newChangedPoints, true);
+            }
         }
 
         double[] getElementStiffnessMatrix(Triangle elem)
@@ -655,12 +656,12 @@ namespace Finite_Elements_method
             /* Решаем методом Холецкого LU*x=f и возвращаем результат */
 
             /*Следующий код находится на стадии правки нераскомменчивать*/
-            //bool ok;
-            //int[] m = CuthillMcKee(cd.M, out ok);
-            //if (ok)
-            //{
-            //    applyCuthillMcKee(cd, m);
-            //}
+            bool ok;
+            int[] m = CuthillMcKee(cd.M, out ok);
+            if (ok)
+            {
+                applyCuthillMcKee(cd, m);
+            }
             int L = getBandWidthOfConnectivityMatrix(cd.M);
             int[][] tr = GetTriangles(cd.NTotalNodes, cd.Coords, cd.M);
             return Solve_main(L, cd.NTotalNodes, tr.Length, cd.Coords, tr, cd.u, cd.E, cd.v);
