@@ -409,10 +409,148 @@ namespace Finite_Elements_method
             Cholesky(K,2*N,L,f,u);
         }
 
+
         /* Алгоритм Кахилла-Маки перенумерации вершин */
-        int[][] CuthillMcKee(int[][] connMatrix)
+        int[] lastLevel(int[][] connMatrix, int N, int beginTop, out int levelNum) 
         {
-            return null;
+            int level = 0;
+            Queue<int[]> qLevels = new Queue<int[]>();
+            List<int[]> ll = new List<int[]>();
+            List<int> passed = new List<int>();
+            List<int> l = new List<int>();
+            int[] l1 = new int[1] { beginTop };
+            passed.Add(beginTop);
+            ll.Add(l1);
+            qLevels.Enqueue(l1);
+            while (qLevels.Count != 0) 
+            {
+                l1 = qLevels.Dequeue();
+                l = new List<int>();
+                foreach (int i in l1) 
+                {
+                    for (int j = 0; j < N; j++) 
+                    {
+                        if ((i != j)&&(connMatrix[i][j] == 1)&&(!passed.Contains(j)))
+                        {
+                            l.Add(j);
+                            passed.Add(j);
+                        }
+                    }
+                }
+                if (l.Count != 0) 
+                {
+                    level++;
+                    qLevels.Enqueue(l.ToArray());
+                    ll.Add(l.ToArray());
+                }
+            }
+            levelNum = level;
+            return ll[level];
+        }
+
+        int[] pairedTops(int[][] connMatrix, int N, int top, List<int> passed)
+        {
+            List<int> l = new List<int>();
+            for (int j = 0; j < N; j++) 
+            {
+                if ((top != j)&&(connMatrix[top][j] == 1)&&(!passed.Contains(j)))
+                {
+                    l.Add(j);
+                }
+            }
+            return l.ToArray();
+        }
+
+        int countLink(int[][] connMatrix, int N, int top) 
+        {
+            int count = 0;
+            for (int j = 0; j < N; j++)
+            {
+                if ((top != j) && (connMatrix[top][j] == 1))
+                {
+                    count++;
+                }
+            }
+            return count;
+        }
+
+        int[] CuthillMcKee(int[][] connMatrix, out bool ok)
+        {
+            int N = connMatrix[0].Length;
+            int levelFirst; 
+            int[] levelCurrL;
+            int[] first, curr;
+            first = lastLevel(connMatrix, N, 0, out levelFirst);
+            int top;
+            top = first[0];
+            if (first.Length > 1)
+            {
+                //Определяем вершину, из тех что на последнем уровне, с минимальным числом связей
+                int count, min;
+                top = first[0];
+                min = countLink(connMatrix, N, top);
+                foreach (int i in first)
+                {
+                    count = countLink(connMatrix, N, i);
+                    if (count < min)
+                    {
+                        min = count;
+                        top = i;
+                    }
+                }
+            }
+            first = lastLevel(connMatrix, N, top, out levelFirst);
+            levelCurrL = new int[first.Length];
+            int k = 0;
+            foreach (int i in first) 
+            {
+                curr = lastLevel(connMatrix, N, i, out levelCurrL[k]);
+                k++;
+            }
+            ok = true;
+            foreach (int i in levelCurrL) 
+            {
+                if (i != levelFirst) 
+                {
+                   ok = false;
+                    break;
+                }
+            }
+            int[] result = new int[N];
+            if (!ok)
+            {
+                return null;
+            }
+            else 
+            {
+                int i = N-1;
+                Queue<int> q = new Queue<int>();
+                q.Enqueue(top);
+                List<int> l = new List<int>();
+                int[] l1;
+                l.Add(top);
+                while (q.Count != 0)  
+                {
+                    top = q.Dequeue();
+                    result[i] = top;
+                    i--;
+                    l1 = pairedTops(connMatrix, N, top, l);
+                    foreach (int j in l1) 
+                    {
+                        q.Enqueue(j);
+                        l.Add(j);
+                    }
+
+                }
+            }
+            return result;   
+        }
+
+        void applyCuthillMcKee(CommonData c, int[] newTopsNum) 
+        {
+            List<int> l = newTopsNum.ToList<int>();
+            List<int[]> newConnMatrix = new List<int[]>();
+            
         }
 
         double[] getElementStiffnessMatrix(Triangle elem)

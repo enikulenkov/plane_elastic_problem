@@ -27,8 +27,8 @@ namespace Finite_Elements_method
             {
                 if (p.X > xmax) xmax = p.X;
                 if (p.X < xmin) xmin = p.X;
-                if (p.X > xmax) ymax = p.Y;
-                if (p.X < xmin) ymin = p.Y;
+                if (p.Y > ymax) ymax = p.Y;
+                if (p.Y < ymin) ymin = p.Y;
             }
             d1 = Math.Abs(xmax - xmin)/2;
             d2 = Math.Abs(ymax - ymin)/2;
@@ -56,7 +56,7 @@ namespace Finite_Elements_method
 
         int CoordYtoScreenY(double y)
         {
-            return Convert.ToInt32(((y1 - y) * height / (y1 - y0) / 2));
+            return Convert.ToInt32(((y1 - y) * height / (y1 - y0)));
         }
 
         double ScreenXtoCoordX(double x)
@@ -66,7 +66,7 @@ namespace Finite_Elements_method
 
         double ScreenYtoCoordY(double y)
         {
-            return y1 - y * (y1 - y0) * 2 / height ;
+            return y1 - y * (y1 - y0) / height ;
         }
 
         
@@ -95,6 +95,9 @@ namespace Finite_Elements_method
 
         private void tsmiCalculate_Click(object sender, EventArgs e)
         {
+            Solver s = new Solver();
+            s.Solve(cd);
+            pbMain.Refresh();
             /* Создать Solver и вызывать Solver.Solve() */
             /* Поменять CommmonData.Coords в соответствии с решением */
             /* Вызвать DrawArea. Пока просто вызвать перерисовку pbMain.Refresh()*/
