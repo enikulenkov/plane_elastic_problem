@@ -41,14 +41,6 @@ namespace Finite_Elements_method
             y1 = ymax + d;
         }
 
-        /* Параметры берутся из CommonData */
-        /*Функция пока не нужна отрисовка происходит в компоненте. 
-         * Возможно понадобиться позже для отрисовки в различных вариантах*/
-        void DrawArea()
-        {
-
-        }
-        
         /*Функции преобразования координат*/
         int CoordXtoScreenX(double x) 
         {
@@ -91,7 +83,7 @@ namespace Finite_Elements_method
 
         private void tsmiCalculate_Click(object sender, EventArgs e)
         {
-            cd.SetChangedPoints(changedPoints.ToArray());
+            cd.SetChangedPoints(changedPoints.ToArray(),false);
             Solver s = new Solver();
             s.Solve(cd);
             pbMain.Refresh();
@@ -144,7 +136,7 @@ namespace Finite_Elements_method
                 }
             }
         }
-        void draw(PaintEventArgs e, bool withMoves = false)
+        void Draw(PaintEventArgs e, bool withMoves)
         {
             Pen whitePen = new Pen(Color.White);
             Pen blackPen = new Pen(Color.Black);
@@ -252,8 +244,8 @@ namespace Finite_Elements_method
         {
             if (cd != null) 
             {
-                draw(e);
-                draw(e, true);
+                Draw(e, false);
+                Draw(e, true);
                 if (tsmiPaintGrid.Checked)
                 {
                     CreateGrid(e);

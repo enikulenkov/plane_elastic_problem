@@ -206,7 +206,7 @@ namespace Finite_Elements_method
             get { return _v; }
         }
 
-        public void SetChangedPoints(int[] value, bool afterCM = false) 
+        public void SetChangedPoints(int[] value, bool afterCM) 
         {
             if (_changedPoints != null)
             {
