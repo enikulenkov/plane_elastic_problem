@@ -101,6 +101,17 @@ namespace Finite_Elements_method
             /* Создать Solver и вызывать Solver.Solve() */
             /* Поменять CommmonData.Coords в соответствии с решением */
             /* Вызвать DrawArea. Пока просто вызвать перерисовку pbMain.Refresh()*/
+            Solver solver = new Solver();
+            double[] deltas = solver.Solve(cd);
+            if (deltas != null)
+            {
+                for (int i = 0; i < deltas.Length; i+=2)
+                {
+                    cd.Coords[i / 2].Dx += deltas[i];
+                    cd.Coords[i / 2].Dy += deltas[i + 1];
+                }
+            }
+            pbMain.Refresh();
         }
 
         private void MainForm_Load(object sender, EventArgs e)

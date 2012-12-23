@@ -12,11 +12,14 @@ namespace MathTests
         private string[] input_files = new string[]
         {
             "integration1.txt",
+            "integration2.txt",
         };
 
         private double[][] input_u_vectors = new double[][]
         {
-            new double[] {0.15, 0.45, 0, 0, 0, 0.31, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+            new double[] {0.15, 0.45, 0, 0, 0, 0.31, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+
+            new double[] {0, 0, 0.8256, 0.04, 0, 0},
         };
 
         private double[][] expected_output_u_vectors = new double[][]
@@ -26,6 +29,15 @@ namespace MathTests
                             0.22, 0.24, 0.29, 0.45, 0.29, 0.38, 0.29, 
                             0.31, 0.29, 0.24, 0.36, 0.45, 0.36, 0.38, 
                             0.36, 0.31, 0.36, 0.24},
+
+            new double[] {1.016975, 0.040000, 0.825600, 0.040000, 0.729913, 
+                          0.135687, 1.016975, 0.231375, 0.825600, 0.231375, 
+                          0.921288, 0.327062, 0.634225, 0.040000, 0.442850, 
+                          0.040000, 0.634225, 0.231375, 1.016975, 0.422750, 
+                          1.016975, 0.614125, 0.825600, 0.422750, 0.442850, 
+                          0.231375, 0.538538, 0.327062, 0.634225, 0.422750, 
+                          0.825600, 0.614125, 0.729913, 0.518437, 0.442850, 
+                          0.422750, 0.634225, 0.614125, 0.442850, 0.614125},
         };
 
         public SolveTestExecutor()
@@ -90,14 +102,14 @@ namespace MathTests
             {
                 CommonData data = new CommonData();
                 data.Load(test_samples_dir + f);
-                for (int i = 0; i < u.Length; i++)
+                for (int i = 0; i < u.Length; i+=2)
                 {
-                    data.u[i] = u[i];
+                    data.Coords[i / 2].Dx = u[i];
+                    data.Coords[i / 2].Dy = u[i+1];
                 }
                 Console.WriteLine("Data is loaded");
                 Solver s = new Solver();
-                s.Solve(data);
-                return data.u;
+                return s.Solve(data);
             }
             catch (Exception e)
             {

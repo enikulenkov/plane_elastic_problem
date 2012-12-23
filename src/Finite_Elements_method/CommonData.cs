@@ -20,7 +20,7 @@ namespace Finite_Elements_method
         private int[] _BoundExternal;  //номера узлов, образующих внешнюю границу
         private int[] _BoundInternal;  //номера узлов, образующих внутреннюю границу
         private Triangle[] _Triangles; //треугольники
-        private double[] _u;           //вектор перемещений
+        //private double[] _u;           //вектор перемещений
         private Point[] _Coords;       //массив координат вершин
         private double _E, _v;          //параметры материала
         //double x0,x1,y0,y1;   //min и max координаты области
@@ -119,8 +119,6 @@ namespace Finite_Elements_method
 
             this._E = double.Parse(inputLines[lineIdx++]);
             this._v = double.Parse(inputLines[lineIdx++]);
-
-            this._u = new double[2 * _NTotalNodes];
         }
 
         /********************* Properties *********************/
@@ -172,8 +170,17 @@ namespace Finite_Elements_method
 
         public double[] u
         {
-            get { return _u; }
-            set { _u = value; }
+            get 
+            {
+                double[] res = new double[NTotalNodes*2];
+                for (int i = 0; i < NTotalNodes * 2; i += 2)
+                {
+                    res[i] = this._Coords[i / 2].Dx;
+                    res[i + 1] = this._Coords[i / 2].Dy;
+                }
+
+                return res;
+            }
         }
 
         public Point[] Coords
