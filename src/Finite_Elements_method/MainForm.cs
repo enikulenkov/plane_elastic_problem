@@ -16,6 +16,7 @@ namespace Finite_Elements_method
         private int height, width;
         private int currentPoint = -1;
         private int oldX,oldY;
+        List<int> changedPoints;
 
         void GetExtremePosition() 
         {
@@ -75,13 +76,6 @@ namespace Finite_Elements_method
             InitializeComponent();
         }
 
-        private void btnCalculate_Click(object sender, EventArgs e)
-        {
-            /* Создать Solver и вызывать Solver.Solve() */
-            /* Поменять CommmonData.Coords в соответствии с решением */
-            /* Вызвать DrawArea */
-        }
-
         private void tsmiLoad_Click(object sender, EventArgs e)
         {
             if (ofdLoad.ShowDialog() == DialogResult.OK) 
@@ -89,26 +83,36 @@ namespace Finite_Elements_method
                 cd = new CommonData();
                 cd.Load(ofdLoad.FileName);
                 GetExtremePosition();
+                changedPoints = new List<int>();
+                tsmiCalculate.Enabled = true;
                 pbMain.Refresh();
             }
         }
 
         private void tsmiCalculate_Click(object sender, EventArgs e)
         {
+            cd.ChangedPoints = changedPoints.ToArray();
             Solver s = new Solver();
             s.Solve(cd);
             pbMain.Refresh();
             /* Создать Solver и вызывать Solver.Solve() */
             /* Поменять CommmonData.Coords в соответствии с решением */
             /* Вызвать DrawArea. Пока просто вызвать перерисовку pbMain.Refresh()*/
-            Solver solver = new Solver();
+            Solver solver = new Solver();
+            changedPoints = new List<int>(cd.ChangedPoints);
             double[] deltas = solver.Solve(cd);
             if (deltas != null)
             {
+                int j;
                 for (int i = 0; i < deltas.Length; i+=2)
                 {
-                    cd.Coords[i / 2].Dx += deltas[i];
-                    cd.Coords[i / 2].Dy += deltas[i + 1];
+                    j = i / 2;
+                    if (!changedPoints.Contains(j)) 
+                    {
+                        cd.Coords[i / 2].Dx += deltas[i];
+                        cd.Coords[i / 2].Dy += deltas[i + 1];
+                    } 
+                    
                 }
             }
             pbMain.Refresh();
@@ -116,67 +120,142 @@ namespace Finite_Elements_method
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+            tsmiCalculate.Enabled = false;
             width = pbMain.Width;
             height = pbMain.Height;
+        }
+
+        void CreateGrid(PaintEventArgs e) 
+        {
+            Pen pen = new Pen(Color.Black, 1);
+            pen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
+            for (int i = 0; i < cd.NTotalNodes; i++) 
+            {
+                for (int j = 0; j < cd.NTotalNodes; j++) 
+                {
+                    if (cd.M[i][j] == 1)
+                    {
+                        e.Graphics.DrawLine(pen,
+                            CoordXtoScreenX(cd.Coords[i].X), 0, CoordXtoScreenX(cd.Coords[i].X), height);
+                        e.Graphics.DrawLine(pen,
+                             0, CoordYtoScreenY(cd.Coords[i].Y), width, CoordYtoScreenY(cd.Coords[i].Y));
+                    }
+                }
+            }
+        }
+        void draw(PaintEventArgs e, bool withMoves = false)
+        {
+            Pen whitePen = new Pen(Color.White);
+            Pen blackPen = new Pen(Color.Black);
+            Pen redPen = new Pen(Color.Red);
+            Pen greenPen = new Pen(Color.Green);
+            Pen grayPen = new Pen(Color.SlateGray);
+
+            whitePen.Width = 2;
+            blackPen.Width = 2;
+            redPen.Width = 2;
+            greenPen.Width = 2;
+            grayPen.Width = 2;
+
+            Point pI, pJ;
+            for (int i = 0; i < cd.NTotalNodes; i++)
+            {
+                for (int j = 0; j < i; j++)
+                {
+                    if (cd.M[i][j] == 1)
+                    {
+                        pI = cd.Coords[i];
+                        pJ = cd.Coords[j];
+                        if (withMoves)
+                        {
+                            e.Graphics.DrawLine(blackPen,
+                                CoordXtoScreenX(pI.X + pI.Dx),
+                                CoordYtoScreenY(pI.Y + pI.Dy),
+                                CoordXtoScreenX(pJ.X + pJ.Dx),
+                                CoordYtoScreenY(pJ.Y + pJ.Dy));
+                        }
+                        else
+                        {
+                            e.Graphics.DrawLine(grayPen,
+                                CoordXtoScreenX(pI.X),
+                                CoordYtoScreenY(pI.Y),
+                                CoordXtoScreenX(pJ.X),
+                                CoordYtoScreenY(pJ.Y));
+                        }
+                        
+                    }
+
+                }
+            }
+
+            int x, y, p;
+            for (int i = 0; i < cd.NExternalNodes; i++)
+            {
+                p = cd.BoundExternal[i];
+                pI = cd.Coords[p];
+                if (withMoves)
+                {
+                    x = CoordXtoScreenX(pI.X + pI.Dx);
+                    y = CoordYtoScreenY(pI.Y + pI.Dy);
+                    e.Graphics.DrawRectangle(greenPen, x - 4, y - 4, 8, 8);
+                }
+                else
+                {
+                    x = CoordXtoScreenX(pI.X);
+                    y = CoordYtoScreenY(pI.Y);
+                    e.Graphics.DrawRectangle(grayPen, x - 4, y - 4, 8, 8);
+                }
+
+            }
+
+
+            for (int i = 0; i < cd.NInternalNodes; i++)
+            {
+                p = cd.BoundInternal[i];
+                pI = cd.Coords[p];
+                if (withMoves)
+                {
+                    x = CoordXtoScreenX(pI.X + pI.Dx);
+                    y = CoordYtoScreenY(pI.Y + pI.Dy);
+                    e.Graphics.DrawRectangle(redPen, x - 4, y - 4, 8, 8);
+                }
+                else
+                {
+                    x = CoordXtoScreenX(pI.X);
+                    y = CoordYtoScreenY(pI.Y);
+                    e.Graphics.DrawRectangle(grayPen, x - 4, y - 4, 8, 8);
+                }
+            }
+            Font font = new Font("Times New Roman", 10);
+            for (int i = 0; i < cd.NTotalNodes; i++)
+            {
+                pI = cd.Coords[i];
+                if (withMoves)
+                {
+                    x = CoordXtoScreenX(pI.X + pI.Dx);
+                    y = CoordYtoScreenY(pI.Y + pI.Dy);
+                    e.Graphics.DrawString(i.ToString(), font, blackPen.Brush, x + 3, y + 3);
+                }
+                else
+                {
+                    x = CoordXtoScreenX(pI.X);
+                    y = CoordYtoScreenY(pI.Y);
+                    e.Graphics.DrawString(i.ToString(), font, grayPen.Brush, x + 3, y + 3);
+                }
+
+            }
+
         }
 
         private void pbMain_Paint(object sender, PaintEventArgs e)
         {
             if (cd != null) 
             {
-                Pen whitePen = new Pen(Color.White);
-                Pen blackPen = new Pen(Color.Black);
-                Pen redPen = new Pen(Color.Red);
-                Pen greenPen = new Pen(Color.Green);
-                whitePen.Width = 2;
-                blackPen.Width = 2;
-                redPen.Width = 2;
-                greenPen.Width = 2;
-                Point pI, pJ;
-                for (int i = 0; i < cd.NTotalNodes; i++)
+                draw(e);
+                draw(e, true);
+                if (tsmiPaintGrid.Checked)
                 {
-                    for (int j = 0; j < i; j++)
-                    {
-                        if (cd.M[i][j] == 1)
-                        {
-                            pI = cd.Coords[i];
-                            pJ = cd.Coords[j];
-                            e.Graphics.DrawLine(blackPen, 
-                                CoordXtoScreenX(pI.X + pI.Dx ),
-                                CoordYtoScreenY(pI.Y + pI.Dy),
-                                CoordXtoScreenX(pJ.X + pJ.Dx),
-                                CoordYtoScreenY(pJ.Y + pJ.Dy));
-                        }
-
-                    }
-                }
-
-                int x, y, p;
-                for (int i = 0; i < cd.NExternalNodes; i++)
-                {
-                    p = cd.BoundExternal[i];
-                    pI = cd.Coords[p];
-                    x = CoordXtoScreenX(pI.X + pI.Dx);
-                    y = CoordYtoScreenY(pI.Y + pI.Dy);
-                    e.Graphics.DrawRectangle(greenPen,x-4,y-4,8,8);
-                }
-
-
-                for (int i = 0; i < cd.NInternalNodes; i++)
-                {
-                    p = cd.BoundInternal[i];
-                    pI = cd.Coords[p];
-                    x = CoordXtoScreenX(pI.X + pI.Dx);
-                    y = CoordYtoScreenY(pI.Y + pI.Dy);
-                    e.Graphics.DrawRectangle(redPen, x - 4, y - 4, 8, 8);
-                }
-                Font font = new Font("Times New Roman",10);
-                for (int i = 0; i < cd.NTotalNodes; i++)
-                {
-                    pI = cd.Coords[i];
-                    x = CoordXtoScreenX(pI.X + pI.Dx);
-                    y = CoordYtoScreenY(pI.Y + pI.Dy);
-                    e.Graphics.DrawString(i.ToString(), font, blackPen.Brush, x + 3, y + 3);
+                    CreateGrid(e);
                 }
             }
         }
@@ -226,6 +305,7 @@ namespace Finite_Elements_method
             pbMain.Cursor = Cursors.Arrow;
         }
 
+
         private void pbMain_MouseDown(object sender, MouseEventArgs e)
         {
             if (cd == null) return;
@@ -270,12 +350,26 @@ namespace Finite_Elements_method
             {
                 if (e.Button == System.Windows.Forms.MouseButtons.Left) 
                 {
+                    changedPoints.Add(currentPoint);
                     cd.Coords[currentPoint].Dx += ScreenXtoCoordX(e.X) - ScreenXtoCoordX(oldX);
                     cd.Coords[currentPoint].Dy += ScreenYtoCoordY(e.Y) - ScreenYtoCoordY(oldY);
                 }
             }
             currentPoint = -1;
             pbMain.Cursor = Cursors.Arrow;
+            pbMain.Refresh();
+        }
+
+        private void tsmiPaintGrid_Click(object sender, EventArgs e)
+        {
+            if(tsmiPaintGrid.Checked)
+            {
+                tsmiPaintGrid.Checked = false;
+            }
+            else
+            {
+                tsmiPaintGrid.Checked = true;
+            }
             pbMain.Refresh();
         }
 

@@ -33,16 +33,20 @@
             this.tsmiLoad = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiCalculate = new System.Windows.Forms.ToolStripMenuItem();
             this.ofdLoad = new System.Windows.Forms.OpenFileDialog();
+            this.tsmiOptions = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiPaintGrid = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.pbMain)).BeginInit();
             this.msMainMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // pbMain
             // 
+            this.pbMain.BackColor = System.Drawing.Color.White;
             this.pbMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pbMain.Location = new System.Drawing.Point(0, 24);
             this.pbMain.Name = "pbMain";
             this.pbMain.Size = new System.Drawing.Size(625, 304);
+            this.pbMain.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pbMain.TabIndex = 0;
             this.pbMain.TabStop = false;
             this.pbMain.Paint += new System.Windows.Forms.PaintEventHandler(this.pbMain_Paint);
@@ -55,7 +59,8 @@
             // 
             this.msMainMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsmiLoad,
-            this.tsmiCalculate});
+            this.tsmiCalculate,
+            this.tsmiOptions});
             this.msMainMenu.Location = new System.Drawing.Point(0, 0);
             this.msMainMenu.Name = "msMainMenu";
             this.msMainMenu.Size = new System.Drawing.Size(625, 24);
@@ -80,6 +85,23 @@
             // 
             this.ofdLoad.DefaultExt = "txt";
             this.ofdLoad.Filter = "TXT files|*.txt";
+            // 
+            // tsmiOptions
+            // 
+            this.tsmiOptions.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiPaintGrid});
+            this.tsmiOptions.Name = "tsmiOptions";
+            this.tsmiOptions.Size = new System.Drawing.Size(78, 20);
+            this.tsmiOptions.Text = "Настройка";
+            // 
+            // tsmiPaintGrid
+            // 
+            this.tsmiPaintGrid.Checked = true;
+            this.tsmiPaintGrid.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.tsmiPaintGrid.Name = "tsmiPaintGrid";
+            this.tsmiPaintGrid.Size = new System.Drawing.Size(156, 22);
+            this.tsmiPaintGrid.Text = "Рисовать сетку";
+            this.tsmiPaintGrid.Click += new System.EventHandler(this.tsmiPaintGrid_Click);
             // 
             // MainForm
             // 
@@ -107,6 +129,8 @@
         private System.Windows.Forms.ToolStripMenuItem tsmiLoad;
         private System.Windows.Forms.ToolStripMenuItem tsmiCalculate;
         private System.Windows.Forms.OpenFileDialog ofdLoad;
+        private System.Windows.Forms.ToolStripMenuItem tsmiOptions;
+        private System.Windows.Forms.ToolStripMenuItem tsmiPaintGrid;
     }
 }
 

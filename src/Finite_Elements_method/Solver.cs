@@ -569,7 +569,55 @@ namespace Finite_Elements_method
         {
             List<int> l = newTopsNum.ToList<int>();
             List<int[]> newConnMatrix = new List<int[]>();
-            
+            int[] connString;
+            for (int i = 0; i < c.NTotalNodes; i++) 
+            {
+                connString = new int[c.NTotalNodes];
+                int oldTop = l[i];
+                connString[i] = 1;
+                for (int j = 0; j < c.NTotalNodes; j++) 
+                {
+                    if ((oldTop != j) && (c.M[oldTop][j] == 1)) 
+                    {
+                        connString[l.IndexOf(j)] = 1;
+                    }
+                }
+                newConnMatrix.Add(connString);
+            }
+            Point[] newCoord = new Point[c.NTotalNodes];
+            for(int i = 0; i < c.NTotalNodes; i++)
+            {
+                newCoord[i] = c.Coords[l[i]];
+            }
+            int[] newBoundExternal = new int[c.NExternalNodes];
+            int k = 0;
+            foreach (int i in c.BoundExternal) 
+            {
+                newBoundExternal[k] = l.IndexOf(i);
+                k++;
+            }
+            int[] newBoundInternal = new int[c.NInternalNodes];
+            k = 0;
+            foreach (int i in c.BoundInternal)
+            {
+                newBoundInternal[k] = l.IndexOf(i);
+                k++;
+            }
+
+            int[] newChangedPoints = new int[c.ChangedPoints.Length];
+            k = 0;
+            foreach (int i in c.ChangedPoints)
+            {
+                newChangedPoints[k] = l.IndexOf(i);
+                k++;
+            }
+            c.M = newConnMatrix.ToArray();
+            c.BoundExternal = newBoundExternal;
+            c.BoundInternal = newBoundInternal;
+            c.Coords = newCoord;
+            c.ChangedPoints = newChangedPoints;
+
+
         }
 
         double[] getElementStiffnessMatrix(Triangle elem)
@@ -606,6 +654,13 @@ namespace Finite_Elements_method
             /* Посчитать f с учетом граничных условий (CommonData.u) */
             /* Решаем методом Холецкого LU*x=f и возвращаем результат */
 
+            /*Следующий код находится на стадии правки нераскомменчивать*/
+            //bool ok;
+            //int[] m = CuthillMcKee(cd.M, out ok);
+            //if (ok)
+            //{
+            //    applyCuthillMcKee(cd, m);
+            //}
             int L = getBandWidthOfConnectivityMatrix(cd.M);
             int[][] tr = GetTriangles(cd.NTotalNodes, cd.Coords, cd.M);
             return Solve_main(L, cd.NTotalNodes, tr.Length, cd.Coords, tr, cd.u, cd.E, cd.v);
