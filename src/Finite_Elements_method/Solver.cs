@@ -48,8 +48,10 @@ namespace Finite_Elements_method
         }
 
         //-------------------метод Халецкого-------------------------------------------
-        private void Cholesky(double[][] A, int N, int L, double[] f, double[] x)
+        private double[] Cholesky(double[][] A, int N, int L, double[] f)
         {
+            double[] res = new double[N];
+
 	        double[][] B, C;
 	        B=new double[N][];
             C=new double[N][];
@@ -99,10 +101,12 @@ namespace Finite_Elements_method
 		        double t=0;
 		        for(int k=i+1; k<KN(i,L,N/2); ++k)
                 {
-			        t+=C[i][k-i+L-1]*x[k];
+			        t+=C[i][k-i+L-1]*res[k];
                 }
-		        x[i]=y[i]-t;
+		        res[i]=y[i]-t;
 	        }
+
+            return res;
         }
 
         private void AddTriangle(int[][] A,int a, int b, int c, int k, Point[]C)
@@ -184,10 +188,13 @@ namespace Finite_Elements_method
 	                    if(count==3) 
                         {
                             AddTriangle(Tr,i,j,tmp2[3],Ntr,Coords);
+                            Ntr++;
                         }
                     }
                 } //for j
             } //for i
+
+            Array.Resize(ref Tr, Ntr);
 
             return Tr;
         }
@@ -377,13 +384,17 @@ namespace Finite_Elements_method
              }
         }
 //----------------------Учёт граничных условий--------------------------
-        private void SetBoundaryConditions(double[][] K, int N, int L, double[] f, double[] u)
+        /* Возвращает true, если хотя бы одно граничное условие найдено; иначе false */
+        private bool SetBoundaryConditions(double[][] K, int N, int L, double[] f, double[] u)
         {
+            bool ret = false;
             for (int i = 0; i < N; ++i)
             {
                 if (u[i] != 0)
                 {
-                    for (int k = K0(i, L); k < KN(i, L, N); ++k)
+                    ret = true;
+
+                    for (int k = K0(i, L); k < KN(i, L, N/2); ++k)
                     {
                         f[k] -= K[k][i - k + L - 1] * u[i];
                         K[k][i - k + L - 1] = K[i][k - i + L - 1] = 0;
@@ -392,10 +403,14 @@ namespace Finite_Elements_method
                     f[i] = u[i];
                 }
             }
+
+            return ret;
         }
 //-------------------Основная процедура решения---------------------
-        void Solve_main(int L, int N, int Ntr, Point[] Coords, int[][] tr, double[] u, double E, double v)
+        double[] Solve_main(int L, int N, int Ntr, Point[] Coords, int[][] tr, double[] u, double E, double v)
         {
+            double[] deltas = null;
+
             double[] f = new double[2 * N];
             double[][] K = new double[2 * N][];
             for(int i=0; i<2*N; ++i)
@@ -405,8 +420,12 @@ namespace Finite_Elements_method
             }
 
             GetK(K, Ntr, Coords, tr, L, E, v);
-            SetBoundaryConditions(K,2*N,L,f,u);
-            Cholesky(K,2*N,L,f,u);
+            if (SetBoundaryConditions(K, 2 * N, L, f, u))
+            {
+                deltas = Cholesky(K, 2 * N, L, f);
+            }
+
+            return deltas;
         }
 
         /* Алгоритм Кахилла-Маки перенумерации вершин */
@@ -440,7 +459,7 @@ namespace Finite_Elements_method
         }
         
         /* Основная процедура решения. Возвращает массив координат точек после деформации */
-        public delta[] Solve(CommonData cd)
+        public double[] Solve(CommonData cd)
         {
             /* Вызываем Катхилла-Макки для перенумерации */
             /* Инициализируем глобальную матрицу жесткости K */
@@ -451,8 +470,7 @@ namespace Finite_Elements_method
 
             int L = getBandWidthOfConnectivityMatrix(cd.M);
             int[][] tr = GetTriangles(cd.NTotalNodes, cd.Coords, cd.M);
-            Solve_main(L, cd.NTotalNodes, tr.Length, cd.Coords, tr, cd.u, cd.E, cd.v);
-            return null;
+            return Solve_main(L, cd.NTotalNodes, tr.Length, cd.Coords, tr, cd.u, cd.E, cd.v);
         }
     }
 }
