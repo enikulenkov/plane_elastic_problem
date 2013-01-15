@@ -114,8 +114,11 @@ namespace Finite_Elements_method
                 bndCondition = inputLines[lineIdx + i].Split(' ');
                 vertexNo = int.Parse(bndCondition[0]);
                 dx = double.Parse(bndCondition[1]);
-                this._Coords[vertexNo].Dx = dx;
                 dy = double.Parse(bndCondition[2]);
+                if ((dx == 0)) dx = 1e-10;
+                if (dy == 0) dy = 1e-10;
+
+                this._Coords[vertexNo].Dx = dx;
                 this._Coords[vertexNo].Dy = dy;
                 _changedPoints[i] = vertexNo;
             }
@@ -204,6 +207,11 @@ namespace Finite_Elements_method
         public double v
         {
             get { return _v; }
+        }
+
+        public void ChangedPointsClear() 
+        {
+            _changedPoints = new int[0];
         }
 
         public void SetChangedPoints(int[] value, bool afterCM) 

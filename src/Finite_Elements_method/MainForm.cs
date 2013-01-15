@@ -17,6 +17,7 @@ namespace Finite_Elements_method
         private int currentPoint = -1;
         private int oldX,oldY;
         List<int> changedPoints;
+        bool first = false;
 
         void GetExtremePosition() 
         {
@@ -108,11 +109,20 @@ namespace Finite_Elements_method
                 }
             }
             pbMain.Refresh();
+            for (int i = 0; i < cd.NTotalNodes; i++)
+            {
+                cd.Coords[i].X += cd.Coords[i].Dx;
+                cd.Coords[i].Y += cd.Coords[i].Dy;
+                cd.Coords[i].Dx = 0;
+                cd.Coords[i].Dy = 0;
+            }
+            changedPoints = new List<int>();
+            cd.ChangedPointsClear();
         }
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            ofdLoad.InitialDirectory = Application.StartupPath;
+          //  ofdLoad.InitialDirectory = Application.StartupPath;
             tsmiCalculate.Enabled = false;
             width = pbMain.Width;
             height = pbMain.Height;
@@ -140,8 +150,8 @@ namespace Finite_Elements_method
         {
             Pen whitePen = new Pen(Color.White);
             Pen blackPen = new Pen(Color.Black);
-            Pen redPen = new Pen(Color.Red);
-            Pen greenPen = new Pen(Color.Green);
+            Pen redPen = new Pen(Color.Blue);
+            Pen greenPen = new Pen(Color.Brown);
             Pen grayPen = new Pen(Color.LightGray);
 
             whitePen.Width = 2;
@@ -344,8 +354,27 @@ namespace Finite_Elements_method
                 if (e.Button == System.Windows.Forms.MouseButtons.Left) 
                 {
                     changedPoints.Add(currentPoint);
-                    cd.Coords[currentPoint].Dx += ScreenXtoCoordX(e.X) - ScreenXtoCoordX(oldX);
-                    cd.Coords[currentPoint].Dy += ScreenYtoCoordY(e.Y) - ScreenYtoCoordY(oldY);
+                    double dx, dy;
+                    if ((ScreenXtoCoordX(e.X) - ScreenXtoCoordX(oldX)) == 0)
+                    {
+                        dx = 1e-10;
+                    }
+                    else
+                    {
+                        dx = (ScreenXtoCoordX(e.X) - ScreenXtoCoordX(oldX));
+                    }
+
+                    if ((ScreenYtoCoordY(e.Y) - ScreenYtoCoordY(oldY)) == 0)
+                    {
+                        dy = 1e-10;
+                    }
+                    else
+                    {
+                        dy = (ScreenYtoCoordY(e.Y) - ScreenYtoCoordY(oldY));
+                    }
+
+                    cd.Coords[currentPoint].Dx += dx;
+                    cd.Coords[currentPoint].Dy += dy;   
                 }
             }
             currentPoint = -1;

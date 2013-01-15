@@ -125,33 +125,6 @@ namespace Finite_Elements_method
 	        A[k][2]=c;
         }
 
-//---------------------------------------------------------------------------
-        private bool CheckTriangle(int a,int b,int c, int Ni, int[] Bi)
-        {
-            int i;
-
-	        for(i=0; i<Ni && Bi[i]<=a; ++i);
-            if (Bi[i] != a)
-            {
-                return true;
-            }
-	        
-            for(i=0; i<Ni && Bi[i]<=b; ++i);
-            if (Bi[i] != b)
-            {
-                return true;
-            }
-
-	        for(i=0;i<Ni&&Bi[i]<=c;++i);
-            if (Bi[i] != c)
-            {
-                return (true);
-            }
-            else
-            {
-                return (false);
-            }
-        }
 //-----------------Получение массива треугольников-------------------------
         private int[][] GetTriangles(int N, Point[]Coords, int[][]M)
         {
@@ -345,8 +318,16 @@ namespace Finite_Elements_method
             Transpon(Be,3,6,Be_t);
             FirstProductMatrix(Be_t,De,Be_t_De);              //множим Be_t с De получаем Be_t_De
             SecondProductMatrix(Be_t_De, Be, Ke);
+            double s = GetTriangleArea(Coor);
+            for (int i = 0; i < 6; i++) 
+            {
+                for (int j = 0; j < 6; j++) 
+                {
+                    Ke[i][j] *= s;
+                }
+            }
         }
-//----------------------------------------------------------------------
+        //----------------------------------------------------------------------
         private void Get_Coor(int e, Point[] Coor, Point[] Coords, int[][] Tr)
         {
             for (int i = 0; i < 3; ++i)
